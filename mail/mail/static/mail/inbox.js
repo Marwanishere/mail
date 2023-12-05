@@ -41,27 +41,15 @@ function send_email() {
   fetch('/emails', {
     method: 'POST',
     body: JSON.stringify({
-      // document.querySelector('form').elements.recipient.value part of following lines
-      // adopted from cs50 chatbot
-      // recipients: document.querySelector('form').elements.recipient.value,
-      // subject: document.querySelector('form').elements.subject.value,
-      // body: document.querySelector('form').elements.body.value
-
-      // The following lines are revisons of previous lines made with the assistance 
-      // of cs50 ai chatbot to avoid the problem that can occur when elements do not have 
-      // the exact names or there are multiple forms on the page
       recipients: document.getElementById('compose-recipients').value,
       subject: document.getElementById('compose-subject').value,
       body: document.getElementById('compose-body').value
     })
   })
-  // res is short for response in js
-  .then(res => res.json())
+  .then(response => response.json())
   // below line generated with assistance from cs50 chatbot
   .then(result => {let sendButton = document.querySelector('input[type="submit"]');
   sendButton.addEventListener('click', send_email); result = console.log("send_email function working hopefully")})
-
-  // err is short for error
-  .catch(err => console.log('Error: Please try again', err));
+  .catch(error => console.log('Error: Please try again', error));
 }
 
