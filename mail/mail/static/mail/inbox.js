@@ -17,7 +17,7 @@ function compose_email() {
   document.querySelector('#compose-view').style.display = 'block';
   document.querySelector('#compose-form').addEventListener("submit", function(occurance){occurance.preventDefault(); send_email();});
   // the above line adds an event listener to the submit button so that when it gets clicked, the default response is 
-  // overwritten and instead the function send_email is imposed.
+  // overwritten and instead the function send_email is imposed. made with the help of cs50.ai
 
   // Clear out composition fields
   document.querySelector('#compose-recipients').value = '';
