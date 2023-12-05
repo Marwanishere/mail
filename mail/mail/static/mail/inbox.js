@@ -57,7 +57,9 @@ function send_email() {
   })
   // res is short for response in js
   .then(res => res.json())
-  .then(result => {if (result.status === "pass"){ console.log("passed in send_email");}})
+  // below line generated with assistance from cs50 chatbot
+  .then(result => {let sendButton = document.querySelector('input[type="submit"]');
+  sendButton.addEventListener('click', send_email); result = console.log("send_email function working hopefully")})
 
   // err is short for error
   .catch(err => console.log('Error: Please try again', err));
