@@ -43,9 +43,16 @@ function send_email() {
     body: JSON.stringify({
       // document.querySelector('form').elements.recipient.value part of following lines
       // adopted from cs50 chatbot
-      recipients: document.querySelector('form').elements.recipient.value,
-      subject: document.querySelector('form').elements.subject.value,
-      body: document.querySelector('form').elements.body.value
+      // recipients: document.querySelector('form').elements.recipient.value,
+      // subject: document.querySelector('form').elements.subject.value,
+      // body: document.querySelector('form').elements.body.value
+
+      // The following lines are revisons of previous lines made with the assistance 
+      // of cs50 ai chatbot to avoid the problem that can occur when elements do not have 
+      // the exact names or there are multiple forms on the page
+      recipients: document.getElementById('compose-recipients').value,
+      subject: document.getElementById('compose-subject').value,
+      body: document.getElementById('compose-body').value
     })
   })
   // res is short for response in js
