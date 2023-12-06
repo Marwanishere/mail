@@ -50,6 +50,6 @@ function send_email() {
   // below line generated with assistance from cs50 chatbot
   .then(result => {let sendButton = document.querySelector('input[type="submit"]');
   sendButton.addEventListener('click', send_email); result = console.log("send_email function working hopefully")})
-  .catch(error => console.log('Error: Please try again', error));
+  .catch(error => console.log('Error, Please try again:', error));
 }
 
