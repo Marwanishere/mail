@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
   load_mailbox('inbox');
 });
 
-function compose_email(mailbox) {
+function compose_email() {
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
@@ -23,9 +23,6 @@ function compose_email(mailbox) {
   document.querySelector('#compose-recipients').value = '';
   document.querySelector('#compose-subject').value = '';
   document.querySelector('#compose-body').value = '';
-  document.querySelector("#emails-view").innerHTML = "";
-  inbox(mailbox);
-  // above line taken from cs50 chatbot
 }
 
 function load_mailbox(mailbox) {
@@ -33,6 +30,7 @@ function load_mailbox(mailbox) {
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
+  inbox(mailbox);
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
@@ -72,6 +70,7 @@ function inbox(mailbox){
   // function and .body will be known by the computer to be taken as the body feild from
   // the Email model defined in models.py
   document.querySelector('#emails-view').append(mail);
+  console.log("this message means the inbox function is being called.")
   })
   })
   .catch(er => console.log('error with regards to getting mail in the mailbox', er))
