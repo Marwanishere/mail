@@ -71,3 +71,18 @@ function inbox(mailbox){
   .catch(er => console.log('error with regards to getting mail in the mailbox', er))
 }
 
+function view_email(email_id) {
+  fetch(`/emails/${email_id}`, {method : "GET"})
+  .then(c2json)
+  .then(email => document.querySelector('#emails-view').innerHTML = '';
+  const mail = document.createElement('div');
+  mail.className = 'mail';
+  mail.innerHTML = `<h6>From: ${email.sender} To: ${email.recipients}</h6><br><h3>Subject: ${email.subject}</h3><br>${email.body}`;
+  console.log("message opened");
+  document.querySelector('#emails-view').appendChild(mail)
+  // above line made using cs50 chatbot assistance.
+  .then ( function MAR (email_id){
+    fetch(`/emails/${email_id}`, {method : "PUT", body : JSON.stringify({opened: true})})
+  }
+  ))
+}
