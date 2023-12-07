@@ -36,6 +36,9 @@ function load_mailbox(mailbox) {
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 }
 const c2json = response => response.json();
+// the above line tells the program : when the fetch is requested to take the respnse
+// read the JSON content and then give me that JSON content. It is there to resolve 
+// promises between programs.
 function send_email() {
   console.log("if this message appears send_email is being called"),
   fetch('/emails', {
@@ -47,18 +50,20 @@ function send_email() {
     })
   })
   .then(c2json)
-  .catch(error => console.log('Error, Please try again:', error));
+  .catch(er => console.log('error with regards to sending the email', er));
 }
 
 function inbox(mailbox){
   fetch(`/emails/${mailbox}`,{method: 'GET'})
+  // the above line uses ` to denote that a variable will be used inside of the string.
   .then(c2json)
   .then(emails => {document.querySelector('#emails-view').innerHTML = '';
   // the above line clears the email view.
   emails.forEach(email => {
   const mail = document.createElement('div');
   mail.className = 'mail';
-  mail.innerHTML = email.body;
+  mail.innerHTML = `From: ${email.sender}<br>To: ${email.recipients}<br>Subject: ${email.subject}<br>${email.body}`;
+  // above line made using cs50 chatbot assistance
   document.querySelector('#emails-view').append(mail);
   console.log("this message means the inbox function is being called.")
   })
