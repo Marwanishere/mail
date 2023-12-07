@@ -62,7 +62,7 @@ function inbox(mailbox){
   emails.forEach(email => {
   const mail = document.createElement('div');
   mail.className = 'mail';
-  mail.innerHTML = `From: ${email.sender}<br>To: ${email.recipients}<br>Subject: ${email.subject}<br>${email.body}`;
+  mail.innerHTML = `<h6>From: ${email.sender}<br>To:${email.recipients}</h6> <br>Subject: ${email.subject}<br>${email.body}`;
   // above line made using cs50 chatbot assistance
   document.querySelector('#emails-view').append(mail);
   console.log("this message means the inbox function is being called.")
