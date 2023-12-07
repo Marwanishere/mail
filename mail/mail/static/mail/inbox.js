@@ -63,7 +63,8 @@ function inbox(mailbox){
   const mail = document.createElement('div');
   mail.className = 'mail';
   mail.innerHTML = `<h6>From: ${email.sender}<br>To:${email.recipients}</h6> <br>Subject: ${email.subject}<br>${email.body}`;
-  // above line made using cs50 chatbot assistance
+  mail.addEventListener('click',()=>{ view_email(email.id);});
+  // above two lines made using cs50 chatbot assistance
   document.querySelector('#emails-view').append(mail);
   console.log("this message means the inbox function is being called.")
   })
@@ -72,17 +73,31 @@ function inbox(mailbox){
 }
 
 function view_email(email_id) {
+  // syntax for this function corrected by cs50.ai chatbot
   fetch(`/emails/${email_id}`, {method : "GET"})
   .then(c2json)
-  .then(email => document.querySelector('#emails-view').innerHTML = '';
-  const mail = document.createElement('div');
-  mail.className = 'mail';
-  mail.innerHTML = `<h6>From: ${email.sender} To: ${email.recipients}</h6><br><h3>Subject: ${email.subject}</h3><br>${email.body}`;
-  console.log("message opened");
-  document.querySelector('#emails-view').appendChild(mail)
-  // above line made using cs50 chatbot assistance.
-  .then ( function MAR (email_id){
-    fetch(`/emails/${email_id}`, {method : "PUT", body : JSON.stringify({opened: true})})
-  }
-  ))
+  .then(email => {
+    document.querySelector('#emails-view').innerHTML = '';
+    const mail = document.createElement('div');
+    mail.className = 'mail';
+    mail.innerHTML = `<h6>From: ${email.sender} To: ${email.recipients}</h6><br><h3>Subject: ${email.subject}</h3><br>${email.body}`;
+    document.querySelector('#emails-view').appendChild(mail);
+    console.log("message opened");
+  })
+  .then(() => {
+    fetch(`/emails/${email_id}`, {method : "PUT", body : JSON.stringify({opened: true})});
+  });
+}
+
+function archive(archived) {
+  fetch(`/emails/${email_id}`, {method : "GET"})
+  .then(c2json)
+  .then(email => {
+    fetch(`/emails/${email_id}`,{method :"PUT", body: JSON.stringify({
+      archived: !email.archived
+    })})
+    .then(emails => {document.querySelector('#emails-view').innerHTML = '';
+    load_mailbox('inbox');})
+    .catch(er => console.log('error with regards to archiving an email', er))
+  })
 }
