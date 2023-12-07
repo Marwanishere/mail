@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
   load_mailbox('inbox');
 });
 
-function compose_email() {
+function compose_email(mailbox) {
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
@@ -24,6 +24,8 @@ function compose_email() {
   document.querySelector('#compose-subject').value = '';
   document.querySelector('#compose-body').value = '';
   document.querySelector("#emails-view").innerHTML = "";
+  inbox(mailbox);
+  // above line taken from cs50 chatbot
 }
 
 function load_mailbox(mailbox) {
@@ -35,7 +37,10 @@ function load_mailbox(mailbox) {
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 }
-
+const c2json = response => response.json();
+// the above line tells the program : when the fetch is requested to take the respnse
+// read the JSON content and then give me that JSON content. It is there to resolve 
+// promises between programs.
 function send_email() {
   console.log("if this message appears send_email is being called"),
   fetch('/emails', {
@@ -46,10 +51,29 @@ function send_email() {
       body: document.getElementById('compose-body').value
     })
   })
-  .then(response => response.json())
+  .then(c2json)
   // below line generated with assistance from cs50 chatbot
-  .then(result => {let sendButton = document.querySelector('input[type="submit"]');
-  sendButton.addEventListener('click', send_email); result = console.log("send_email function working hopefully")})
+  .then(result => console.log("dont need to repeat querySelector its already being used to summon this thing"))
   .catch(error => console.log('Error, Please try again:', error));
+}
+
+function inbox(mailbox){
+  fetch(`/emails/${mailbox}`,{method: 'GET'})
+  // the above line uses ` to denote that a variable will be used inside of the string.
+  .then(c2json)
+  .then(emails => {document.querySelector('#emails-view').innerHTML = '';
+  // the above line clears the email view.
+  emails.forEach(email => {
+  const mail = document.createElement('div');
+  mail.className = 'mail';
+  mail.innerHTML = email.body;
+  // the above line sets the mail inner html to the body property of the Email model 
+  // however I should use email as that is the object i am looping over in the forEach
+  // function and .body will be known by the computer to be taken as the body feild from
+  // the Email model defined in models.py
+  document.querySelector('#emails-view').append(mail);
+  })
+  })
+  .catch(er => console.log('error with regards to getting mail in the mailbox', er))
 }
 
