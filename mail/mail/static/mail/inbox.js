@@ -80,7 +80,7 @@ function view_email(email_id) {
     document.querySelector('#emails-view').innerHTML = '';
     const mail = document.createElement('div');
     mail.className = 'mail';
-    mail.innerHTML = `<h6>From: ${email.sender} To: ${email.recipients}</h6><br><h3>Subject: ${email.subject}</h3><br>${email.body}`;
+    mail.innerHTML = `<h6>From: ${email.sender} To: ${email.recipients}</h6><br><h3>Subject: ${email.subject}</h3><br>${email.body}<br>`;
     document.querySelector('#emails-view').appendChild(mail);
     console.log("message opened");
     const archiveClick = document.createElement('button');
