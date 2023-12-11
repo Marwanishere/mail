@@ -83,13 +83,20 @@ function view_email(email_id) {
     mail.innerHTML = `<h6>From: ${email.sender} To: ${email.recipients}</h6><br><h3>Subject: ${email.subject}</h3><br>${email.body}`;
     document.querySelector('#emails-view').appendChild(mail);
     console.log("message opened");
+    const archiveClick = document.createElement('button');
+    archiveClick.textContent = 'archive';
+    //above method for relabelling button acquired through cs50 chatbot
+    archiveClick.addEventListener('click',() => archive(email_id));
+    // above method ()=> ammended using cs50 chatbot advise.
+    mail.appendChild(archiveClick)
+    //above method for appending button acquired through cs50 chatbot
   })
   .then(() => {
     fetch(`/emails/${email_id}`, {method : "PUT", body : JSON.stringify({opened: true})});
   });
 }
 
-function archive(archived) {
+function archive(email_id) {
   fetch(`/emails/${email_id}`, {method : "GET"})
   .then(c2json)
   .then(email => {
@@ -101,3 +108,5 @@ function archive(archived) {
     .catch(er => console.log('error with regards to archiving an email', er))
   })
 }
+
+
