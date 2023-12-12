@@ -50,6 +50,7 @@ function send_email() {
     })
   })
   .then(c2json)
+  .then (() => load_mailbox('sent'))
   .catch(er => console.log('error with regards to sending the email', er));
 }
 
@@ -114,10 +115,10 @@ function archive(email_id) {
 }
 
 function reply (email_id) {
-  fetch(originalemail => {`/emails/${email_id}`, {method: "GET"}})
+  fetch(`/emails/${email_id}`, {method: "GET"})
   .then(c2json)
   //the above line handles the respnonse and converts it to js object notation
-
+  .then(email => {
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
@@ -126,6 +127,5 @@ function reply (email_id) {
   document.querySelector('#compose-recipients').value = email.sender;
   document.querySelector('#compose-subject').value = `Re: ${email.subject}`;
   document.querySelector('#compose-body').value = `On ${email.timestamp}   ${email.sender} wrote:\n ${email.body}`;
-  
-  
+  })
 }
