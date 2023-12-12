@@ -90,6 +90,10 @@ function view_email(email_id) {
     // above method ()=> ammended using cs50 chatbot advise.
     mail.appendChild(archiveClick)
     //above method for appending button acquired through cs50 chatbot
+    const replyClick = document.createElement('button');
+    replyClick.textContent = "reply";
+    replyClick.addEventListener('click', () => reply(email_id));
+    mail.appendChild(replyClick)
   })
   .then(() => {
     fetch(`/emails/${email_id}`, {method : "PUT", body : JSON.stringify({opened: true})});
@@ -109,4 +113,19 @@ function archive(email_id) {
   })
 }
 
+function reply (email_id) {
+  fetch(originalemail => {`/emails/${email_id}`, {method: "GET"}})
+  .then(c2json)
+  //the above line handles the respnonse and converts it to js object notation
 
+  // Show compose view and hide other views
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'block';
+
+  //fill out composition fields
+  document.querySelector('#compose-recipients').value = email.sender;
+  document.querySelector('#compose-subject').value = `Re: ${email.subject}`;
+  document.querySelector('#compose-body').value = `On ${email.timestamp}   ${email.sender} wrote:\n ${email.body}`;
+  
+  
+}
