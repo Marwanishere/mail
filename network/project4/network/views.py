@@ -8,6 +8,7 @@ import json
 
 from .models import User
 from .models import Tweet
+from .models import FS
 
 
 def index(request):
@@ -94,17 +95,21 @@ def smprofile(request, username):
     return render(request, "network/smprofile.html", {"selected_users_old_posts": selected_users_old_posts, "username": username})
 
 def followstatus(request, username):
+    FSinstance = FS.objects.get(following__username=username)
+    organised_data = FSinstance.serialize()
+    FSinstance_follower = FS.objects.filter(follower__username=organised_data['follower']['username'])
+    FSinstance_following = FS.objects.filter(following__username=organised_data['following']['username']); FSinstance = (FSinstance_follower | FSinstance_following)
     if request.method == "PUT":
         data = json.loads(request.body)
-        followstatus = data['followstatus']
-        # above 2 lines acquired through cs50.ai prompting
+        follow_status = data['followstatus']
+        if follow_status == True:
+            follower_user = User.objects.get(username=organised_data['follower']['username'])
+            following_user = User.objects.get(username=organised_data['following']['username'])
+            FS.objects.create(follower=follower_user, following=following_user)
+        elif follow_status == False:
+            FS.objects.filter(follower__username=organised_data['follower']['username'], following__username=organised_data['following']['username']).delete()
+        return JsonResponse({'followstatus': follow_status})
 
-        # to get the user i used the following technique i learned
-        userFollowed = User.objects.get(username=username)
-        if followstatus == 'Follow':
-            request.user.Following_M2M.add(userFollowed)
-        elif followstatus == 'Unfollow':
-            request.user.Following_M2M.remove(userFollowed)
-
-    return JsonResponse({'followstatus': followstatus})
-    
+# double underscore is django's way of allowing you to access fields in related models.
+# is followstatus it has to summon the User model where it does as the FS model is for relationships 
+# whereas the user model is for the users.

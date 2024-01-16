@@ -46,7 +46,7 @@ function toggle_follow_unfollow(e){
     console.log(`following ${username}`) 
     let follow_buttonjs = document.getElementById("follow_button");
     let csrftoken = getCookie('csrftoken')
-    fetch(`/smprofile/${username}/`, {
+    fetch(`/followstatus/${username}/`, {
         method: 'PUT',
         headers: {"X-CSRFToken": csrftoken},
         body: JSON.stringify({
@@ -58,14 +58,16 @@ function toggle_follow_unfollow(e){
     .then (data =>{
         if (data.followstatus == true) {
             followstatus = false
-            follow_buttonjs.innerText = "Follow"
+            follow_buttonjs.innerText = "Unfollow"
             console.log(followstatus)
+            button.dataset.followstatus = followstatus;
         }
         else {
             followstatus = true
-            follow_buttonjs.innerText = "Unfollow"
+            follow_buttonjs.innerText = "Follow"
             console.log(followstatus);
             console.log(data.followstatus);
+            button.dataset.followstatus = followstatus;
         }
     })
     console.log(follow_buttonjs)

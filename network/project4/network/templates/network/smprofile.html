@@ -45,7 +45,7 @@
             {% block body %}
                 <h1>{{ username }} {{ followstatus }}</h1>
                 {% if username != request.user.username and user.is_authenticated %}
-                    <button type="button" class="btn btn-primary" id ="follow_button" data-username="{{ username }}">Follow</button>
+                            <button type="button" class="btn btn-primary" followstatus = "{{ followstatus }}" id ="follow_button" data-username="{{ username }}">Follow</button>
                 {% endif %}
                 {% for post in selected_users_old_posts %}
                     <div id = "old_posts">
