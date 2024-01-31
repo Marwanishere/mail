@@ -11,6 +11,7 @@ class Tweet(models.Model):
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     likes = models.IntegerField(default = 0)
+    liked = models.BooleanField(default = False)
 
     def serialize(self):
         return {
@@ -18,16 +19,11 @@ class Tweet(models.Model):
             "title": self.title,
             "content": self.content,
             "timestamp": self.timestamp.strftime('%B %d, %Y, %I:%M %p'),
-            "likes": self.likes
+            "likes": self.likes,
+            "liked": self.liked,
         }
     # cs50 chatbot helped with making the different variables in the self serialize function
 
 class FS(models.Model):
-    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name= "follower")
-    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name= "following")
-
-    def serialize(self):
-        return {
-            "follower":{"username":self.follower.username, "id":self.follower.id},
-            "following":{"username":self.following.username, "id":self.following.id}
-        }
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name= "follower", default = False)
+    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name= "following", default = False)

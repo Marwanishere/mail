@@ -62,5 +62,91 @@ function delete_old_post(e) {
     })
     .finally(()=> location.reload());
 }
-// when you are working on pagination please make the old posts come up in a blur to 
-// unblur stagnating fashion from the bottom upward on scroll i think that will be so cool
+document.querySelectorAll('#edit-button').forEach(button => {
+    button.addEventListener('click', edit_post);
+});
+document.querySelectorAll('#save-button').forEach(button => {
+    button.addEventListener('click', save_post);
+});
+function edit_post(e){
+    e.preventDefault()
+    e.target.style.display = 'None';
+    var id = e.target.dataset.id;
+    var sb = document.querySelector(`#save-button[data-id= '${id}']`);
+    sb.style.display = 'block';    
+    console.log(`the id of the selected post is '${id}'`)
+    var ta = document.querySelector(`#text-area[data-id = '${id}']`)
+    ta.style.display = 'block';
+    let ot = document.querySelector(`#original-text[data-id = '${id}']`).textContent;
+    document.querySelector(`#text-area[data-id = '${id}']`).value = ot;
+    document.querySelector(`#original-text[data-id = '${id}']`).style.display = 'none';
+}
+function save_post(e){
+    e.preventDefault()
+    e.target.style.display = 'None';
+    var id = e.target.dataset.id;
+    var eb = document.querySelector(`#edit-button[data-id= '${id}']`);
+    eb.style.display = 'block'; 
+    console.log(`the id of the selected post is '${id}'`)
+    var ta = document.querySelector(`#text-area[data-id = '${id}']`)
+    ta.style.display = 'None';
+    fetch(`/edit_post/${id}`,{
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body:JSON.stringify({
+            content: ta.value,
+            id: id
+        })
+    })
+    .then(r => r.json())
+    .then(newer => { document.querySelector(`#original-text[data-id = '${id}']`).textContent = newer.content;
+    document.querySelector(`#original-text[data-id = '${id}']`).style.display = 'block';})
+    .finally(()=> location.reload());
+}
+document.querySelectorAll('#unlike-button').forEach(button => {
+    button.addEventListener('click', unlike_post);
+});
+document.querySelectorAll('#like-button').forEach(button => {
+    button.addEventListener('click', like_post);
+});
+
+function unlike_post(e){
+    e.preventDefault()
+    e.target.style.display = "None"
+    var id = e.target.dataset.id;
+    var lb = document.querySelector(`#like-button[data-id= '${id}']`);
+    lb.style.display = 'inline';
+    liked = true;
+    fetch(`/liked_post/${id}`,{
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body:JSON.stringify({
+            liked: liked,
+            id: id
+        })
+    })
+    .then(r => r.json())
+}
+function like_post(e){
+    e.preventDefault()
+    e.target.style.display = "None"
+    var id = e.target.dataset.id;
+    var ulb = document.querySelector(`#unlike-button[data-id= '${id}']`);
+    ulb.style.display = 'inline';
+    liked = false;
+    fetch(`/liked_post/${id}`,{
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body:JSON.stringify({
+            liked: liked,
+            id: id
+        })
+    })
+    .then(r => r.json())
+}
